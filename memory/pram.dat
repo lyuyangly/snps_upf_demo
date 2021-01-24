@@ -1,0 +1,53 @@
+// ************************************************************************
+// *  SYNOPSYS CONFIDENTIAL PROPRIETARY NOTE                              *
+// *                                                                      *
+// *  This software contains information confidential and proprietary     *
+// *  to Synopsys, Inc. It shall not be reproduced in whole               *
+// *  or in part or transferred to other documents, or disclosed          *
+// *  to third parties, or used for any purpose other than that           *
+// *  for which it was obtained, without the prior written consent        *
+// *  of Synopsys, Inc.                                                   *
+// *  Copyright (c) 2012-2013 Synopsys, Inc.                              *
+// *  All rights reserved                                                 *
+// *                                                                      *
+// ************************************************************************
+
+/* Synopsys tutorial case: A simplified microprogramming-based CPU
+   file name: pram.dat
+   description: This file contains the program rom's contents
+		which represents system operation based on the macroinstruction 
+*/
+//opcode_operand  // hex   addr    assembly code
+    0000_0100      // 04    00     CLRA        ;A=0
+    0011_0100      // 34    01     ADDA #55   ;A=55
+    0101_0101      // 55    02
+    0010_1000      // 28    03     STA  $20    ;($20)=55
+    0010_0000      // 20    04
+    0000_1100      // 0c    05     TAX         ;X=55
+    0101_0100      // 54    06     LDX  #20   ;X=20
+    0010_0000      // 20    07
+    0000_1000      // 08    08     INCA        ;A=$56
+    0010_1100      // 2c    09     STA_  $01,X  ;($(01+20))=56
+    0000_0001      // 01    0A
+    0100_1000      // 48    0B     SUBA $20    ;A=$56-($20)=1
+    0010_0000      // 20    0C
+    0001_1000      // 18    0D     LDA  $21    ;A=$56
+    0010_0001      // 21    0E
+    0011_1000      // 38    0F     ADDA- $20    ;A=$56+($20)
+    0010_0000      // 20    10
+    0010_1000      // 28    11     STA  $22    ;($22)=111
+    0010_0010      // 22    12
+    0000_0100      // 04    13     CLRA        ;A=0
+    0011_0100      // 34    14     ADDA #2   ;A=5
+    0000_0010      // 02    15
+    0010_1000      // 28    16     STA  $23    ;($23)=2
+    0010_0011      // 22    17
+    0001_0100      // 14    18     LDA  10    ;A=10
+    0000_1010      // 10    19
+    1000_1100      // 8c    1a     JMP  $30    
+    0011_0000      // 30    1b
+@30
+    0100_1000      // 48    37     SUBA $23    ;
+    0010_0011      // 23    38
+    0110_0100	   // 64    39	   BNZ #30
+    0011_0000

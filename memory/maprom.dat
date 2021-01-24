@@ -1,0 +1,90 @@
+// ************************************************************************
+// *  SYNOPSYS CONFIDENTIAL PROPRIETARY NOTE                              *
+// *                                                                      *
+// *  This software contains information confidential and proprietary     *
+// *  to Synopsys, Inc. It shall not be reproduced in whole               *
+// *  or in part or transferred to other documents, or disclosed          *
+// *  to third parties, or used for any purpose other than that           *
+// *  for which it was obtained, without the prior written consent        *
+// *  of Synopsys, Inc.                                                   *
+// *  Copyright (c) 2012-2013 Synopsys, Inc.                              *
+// *  All rights reserved                                                 *
+// *                                                                      *
+// ************************************************************************
+
+/* Synopsys tutorial case: A simplified microprogramming-based CPU
+   file name: maprom.dat
+   description: This file contains the mapping rom's contents
+		which represents the starting address of each microprogram 
+*/
+// data	// address	// microprogram
+00	// 00		OpCode fetch
+03	// 01		CLRA (i)
+1e	// 02		INCA (i)
+23	// 03		TXA (i)
+00	// 04
+2b	// 05		LDA
+05	// 06		LDA_ (a)
+00	// 07
+00	// 08
+00	// 09
+09	// 0a		STA (a)
+0e	// 0b		STA (a,x)
+00	// 0c
+13	// 0d		ADDA (#)
+16	// 0e		ADDA (a)
+00	// 0f		
+00	// 10
+00	// 11
+1a	// 12		SUBA (a)
+00	// 13
+00	// 14
+20	// 15		LDX (#)
+00	// 16
+00	// 17
+00	// 18
+25	// 19		BNZ (r)
+00	// 1a
+00	// 1b
+00	// 1c
+00	// 1d
+00	// 1e
+00	// 1f
+00	// 20
+00	// 21
+00	// 22
+28	// 23		JMP (#)
+00	// 24
+00	// 25
+00	// 26
+00	// 27
+00	// 28
+00	// 29
+00	// 2a
+00	// 2b
+00	// 2c
+00	// 2d
+00	// 2e
+00	// 2f
+00	// 30
+00	// 31
+00	// 32
+00	// 33
+00	// 34
+00	// 35
+00	// 36
+00	// 37
+00	// 38
+00	// 39
+00	// 3a
+00	// 3b
+00	// 3c
+00	// 3d
+00	// 3e
+00	// 3f
+
+
+
+
+
+

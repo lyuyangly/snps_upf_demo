@@ -1,0 +1,108 @@
+set_design_top system
+create_power_domain PD_TOP  -include_scope
+
+set_design_attributes -models {pmc} -attribute UPF_dont_touch TRUE
+
+load_upf cpu.upf -scope i_cpu
+
+
+create_supply_net  VDD -domain PD_TOP
+create_supply_port VDD -domain PD_TOP
+connect_supply_net VDD -ports  {VDD}
+create_supply_net  VSS -domain PD_TOP
+create_supply_port VSS -domain PD_TOP
+connect_supply_net VSS -ports  {VSS i_cpu/VSS}
+set_domain_supply_net PD_TOP -primary_power_net VDD -primary_ground_net VSS
+
+
+create_power_domain PD_FSM    -elements {CHILD1 CHILD2 CHILD3 MASTER}
+create_supply_net   VDD_FSM   -domain PD_TOP
+create_supply_net   VDD_FSM   -domain PD_FSM -reuse
+create_supply_net   VSS       -domain PD_FSM -reuse
+create_power_switch SW_FSM    -domain PD_TOP  -input_supply_port {vin VDD} -output_supply_port {vout VDD_FSM} \
+                              -control_port {en pmc/PowerControl[0]} -on_state {ON_STATE vin {en}} -off_state {OFF_STATE {!en}}
+set_domain_supply_net PD_FSM  -primary_power_net VDD_FSM  -primary_ground_net VSS
+
+
+create_supply_net   VDD_CPU    -domain PD_TOP
+create_power_switch SW_CPU     -domain PD_TOP   -input_supply_port {vin VDD} -output_supply_port {vout VDD_CPU} \
+                               -control_port {en pmc/PowerControl[1]} -on_state {ON_STATE vin {en}} -off_state {OFF_STATE {!en}}
+
+
+create_supply_net   VDD_ALUB   -domain PD_TOP
+create_power_switch SW_ALUB    -domain PD_TOP   -input_supply_port {vin VDD_CPU} -output_supply_port {vout VDD_ALUB} \
+                               -control_port {en pmc/PowerControl[2]} -on_state {ON_STATE vin {en}} -off_state {OFF_STATE {!en}}
+
+
+create_supply_net   VDD_CCU   -domain PD_TOP
+create_power_switch SW_CCU    -domain PD_TOP  -input_supply_port {vin VDD_CPU} -output_supply_port {vout VDD_CCU} \
+                              -control_port {en pmc/PowerControl[3]} -on_state {ON_STATE vin {en}} -off_state {OFF_STATE {!en}}
+
+
+create_supply_net   VDD_PCU   -domain PD_TOP
+create_power_switch SW_PCU    -domain PD_TOP  -input_supply_port {vin VDD_CPU} -output_supply_port {vout VDD_PCU} \
+                              -control_port {en pmc/PowerControl[4]} -on_state {ON_STATE vin {en}} -off_state {OFF_STATE {!en}}
+
+
+create_power_domain PD_MEM    -elements {i_pram}
+create_supply_net   VDD_MEM   -domain PD_TOP
+create_supply_net   VDD_MEM   -domain PD_MEM -reuse
+create_supply_net   VSS       -domain PD_MEM -reuse
+create_power_switch SW_MEM    -domain PD_TOP  -input_supply_port {vin VDD} -output_supply_port {vout VDD_MEM} \
+                              -control_port {en pmc/PowerControl[5]} -on_state {ON_STATE vin {en}} -off_state {OFF_STATE {!en}}
+set_domain_supply_net PD_MEM  -primary_power_net VDD_MEM  -primary_ground_net VSS
+
+
+connect_supply_net VDD_CPU    -ports  {i_cpu/VDD_CPU}
+connect_supply_net VDD_ALUB   -ports  {i_cpu/VDD_ALUB}
+connect_supply_net VDD_CCU    -ports  {i_cpu/VDD_CCU}
+connect_supply_net VDD_PCU    -ports  {i_cpu/VDD_PCU}
+
+
+set_isolation iso_ALUB         -domain i_cpu/PD_ALUB -isolation_power_net VDD -isolation_ground_net VSS -clamp_value 0 -applies_to outputs
+set_isolation_control iso_ALUB -domain i_cpu/PD_ALUB -isolation_signal pmc/ALUB_iso -isolation_sense high -location self
+
+
+set_isolation iso_PCU          -domain i_cpu/PD_PCU -isolation_power_net VDD -isolation_ground_net VSS -clamp_value 0 -applies_to outputs
+set_isolation_control iso_PCU  -domain i_cpu/PD_PCU -isolation_signal pmc/PCU_iso -isolation_sense high -location self
+
+
+set_level_shifter ls_ALUB_OUT -domain i_cpu/PD_ALUB  -applies_to outputs
+set_level_shifter ls_PCU_OUT  -domain i_cpu/PD_PCU   -applies_to outputs
+
+
+add_port_state VDD -state {HV 1.08} -state {LV 0.8}
+
+
+add_port_state SW_FSM/vout -state {HV 1.08}
+add_port_state SW_FSM/vout -state {LV 0.8} -state {FSM_OFF off}
+
+
+add_port_state SW_CPU/vout -state {HV 1.08}
+add_port_state SW_CPU/vout -state {LV 0.8} -state {CPU_OFF off}
+
+
+add_port_state SW_ALUB/vout -state {HV 1.08}
+add_port_state SW_ALUB/vout -state {LV 0.8}
+add_port_state SW_ALUB/vout -state {ALUB_OFF off}
+
+
+add_port_state SW_CCU/vout -state {HV 1.08}
+add_port_state SW_CCU/vout -state {LV 0.8}
+add_port_state SW_CCU/vout -state {CCU_OFF off}
+
+
+add_port_state SW_PCU/vout -state {HV 1.08}
+add_port_state SW_PCU/vout -state {LV 0.8}
+add_port_state SW_PCU/vout -state {PCU_OFF off}
+
+
+add_port_state SW_MEM/vout -state {HV 1.08}
+add_port_state SW_MEM/vout -state {LV 0.8} -state {MEM_OFF off}
+
+
+create_pst SYSTEM_PST -supplies {VDD SW_FSM/vout SW_CPU/vout SW_ALUB/vout SW_CCU/vout SW_PCU/vout SW_MEM/vout}
+add_pst_state Normal -pst SYSTEM_PST -state {HV HV HV HV HV HV HV}
+add_pst_state Low_power -pst SYSTEM_PST -state {LV LV LV LV LV LV LV}
+add_pst_state CPU_down -pst SYSTEM_PST -state {HV HV CPU_OFF ALUB_OFF CCU_OFF PCU_OFF HV}
+

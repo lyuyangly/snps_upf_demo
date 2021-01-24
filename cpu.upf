@@ -1,0 +1,45 @@
+create_power_domain   PD_CPU  -include_scope
+create_supply_port    VDD_CPU   -domain PD_CPU
+create_supply_net     VDD_CPU   -domain PD_CPU
+connect_supply_net    VDD_CPU   -ports {VDD_CPU}
+
+
+create_supply_port  VSS   -domain PD_CPU
+create_supply_net   VSS   -domain PD_CPU
+connect_supply_net  VSS   -ports {VSS}
+set_domain_supply_net PD_CPU    -primary_power_net VDD_CPU  -primary_ground_net VSS
+
+
+create_supply_port  VDD_ALUB   -domain PD_CPU
+create_supply_net   VDD_ALUB   -domain PD_CPU
+connect_supply_net  VDD_ALUB   -ports {VDD_ALUB}
+
+
+create_supply_port  VDD_CCU   -domain PD_CPU
+create_supply_net   VDD_CCU   -domain PD_CPU
+connect_supply_net  VDD_CCU   -ports {VDD_CCU}
+
+
+create_supply_port  VDD_PCU   -domain PD_CPU
+create_supply_net   VDD_PCU   -domain PD_CPU
+connect_supply_net  VDD_PCU   -ports {VDD_PCU}
+
+
+
+create_power_domain   PD_ALUB    -elements {i_ALUB}
+create_supply_net     VDD_ALUB   -domain PD_ALUB -reuse
+create_supply_net     VSS        -domain PD_ALUB -reuse
+set_domain_supply_net PD_ALUB    -primary_power_net VDD_ALUB  -primary_ground_net VSS
+
+
+create_power_domain   PD_CCU     -elements {i_CCU}
+create_supply_net     VDD_CCU    -domain PD_CCU -reuse
+create_supply_net     VSS        -domain PD_CCU -reuse
+set_domain_supply_net PD_CCU     -primary_power_net VDD_CCU  -primary_ground_net VSS
+
+
+create_power_domain   PD_PCU     -elements {i_PCU}
+create_supply_net     VDD_PCU    -domain PD_PCU -reuse
+create_supply_net     VSS        -domain PD_PCU -reuse
+set_domain_supply_net PD_PCU     -primary_power_net VDD_PCU  -primary_ground_net VSS
+

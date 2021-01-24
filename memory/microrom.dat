@@ -1,0 +1,67 @@
+// ************************************************************************
+// *  SYNOPSYS CONFIDENTIAL PROPRIETARY NOTE                              *
+// *                                                                      *
+// *  This software contains information confidential and proprietary     *
+// *  to Synopsys, Inc. It shall not be reproduced in whole               *
+// *  or in part or transferred to other documents, or disclosed          *
+// *  to third parties, or used for any purpose other than that           *
+// *  for which it was obtained, without the prior written consent        *
+// *  of Synopsys, Inc.                                                   *
+// *  Copyright (c) 2012-2013 Synopsys, Inc.                              *
+// *  All rights reserved                                                 *
+// *                                                                      *
+// ************************************************************************
+
+/* Synopsys tutorial case: A simplified microprogramming-based CPU
+   file name: microrom.dat
+   description: This file contains the microprogram rom's contents
+		which represents the control sequence of each microprogram 
+*/
+// data	// address	// microprogram
+3d0ee7	// 00		OpCode fetch
+150e67
+000000
+09b4e2	// 03		CLRA (i)
+000000
+3d0ec2	// 05		LDA_ (a)
+3b8e63
+0b86c2
+000000
+3b8ec2	// 09		STA (a)
+398eac
+3d0ece
+098e69
+000000
+3a8ec2	// 0e		STA (a,x)
+398eac
+3d0ece
+098e69
+000000
+3d0ec2	// 13		ADDA (#)
+0b0462
+000000
+3d0ec2	// 16		ADDA (a)
+3b8e63
+0b04c2
+000000
+3d0ec2	// 1a		SUBA (a)
+3b8e63
+0f24c2 
+000000
+0d84e2	// 1e		INCA (i)
+000000
+3d0ec2	// 20		LDX (#)
+0b8a62
+000000
+098ae2	// 23		TXA (i)
+000000
+//3a0ec2	// 25		BNZ (r)
+3b8ec2	// 25		BNZ (r)
+0b8f62
+000000
+3b8ec2	// 28		JMP (#)
+0b8e62
+000000
+3d0ec2	// 2b		LDA (a)
+0b8642
+000000
